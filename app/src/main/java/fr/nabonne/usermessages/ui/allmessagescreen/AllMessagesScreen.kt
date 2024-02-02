@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import fr.nabonne.usermessages.MainActivity
 import fr.nabonne.usermessages.domain.GetAllMessagesUseCaseImpl
 import fr.nabonne.usermessages.domain.model.Message
@@ -52,7 +53,7 @@ fun AllMessagesScreen(
         { getAllMessagesViewModel.refresh() }
     }
     //TODO use collectAsStateWithLifecycle
-    val uiState by getAllMessagesViewModel.state.collectAsState()
+    val uiState by getAllMessagesViewModel.state.collectAsStateWithLifecycle()
     AllMessagesScreen(
         uiState = uiState,
         refreshCb = refreshCb,
