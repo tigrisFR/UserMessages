@@ -7,8 +7,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -36,7 +41,7 @@ fun UserMessagesScreen(
     onComposerNavigationCb: (String) -> Unit,
 ) {
     //TODO proper DI
-    val backStackEntryViewModel = viewModel(
+    val userMessagesScreenViewModel = viewModel(
         initializer = {
             UserMessagesScreenViewModel(
                 user = userProp,
@@ -50,52 +55,63 @@ fun UserMessagesScreen(
     )
 
     val refreshCb: () -> Unit = remember {
-        { backStackEntryViewModel.refresh() }
+        { userMessagesScreenViewModel.refresh() }
     }
-    val uiState by backStackEntryViewModel.state.collectAsStateWithLifecycle(emptyList())
-    Scaffold {
-
-    }
+    val uiState by userMessagesScreenViewModel.state.collectAsStateWithLifecycle(emptyList())
     UserMessagesScreen(
+        userProp = userProp,
         items = uiState,
+        onComposerNavigationCb = { onComposerNavigationCb },
         refreshCb = refreshCb,
-    )
+        )
 }
 
 @Composable
 fun UserMessagesScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
+    userProp: String,
     items: List<Message>,
+    onComposerNavigationCb: (String?) -> Unit,
     refreshCb: () -> Unit,
 ) {
-    Column {
-        Button(
-            modifier = Modifier
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally),
-            onClick = refreshCb,
-        ) {
-            Text("Refresh Messages")
-        }
-        LazyColumn {
-            items(items) {
-                ElevatedCard(
-                    modifier = modifier
-                        .padding(start = 24.dp, bottom = 16.dp)
-                )
-                {
-                    Text(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.secondary,
-                        text = "Subject: ${it.subject}"
-                    )
-                    Text(
+    Scaffold(
+        floatingActionButton = {
+            LargeFloatingActionButton(
+                onClick = { onComposerNavigationCb(null) },
+                shape = CircleShape,) {
+                Icon(Icons.Default.Create, contentDescription = "Compose")
+            }
+        },
+    ) { innerPadding ->
+        Column(modifier = modifier.padding(innerPadding)) {
+            Button(
+                modifier = Modifier
+                    .padding(8.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = refreshCb,
+            ) {
+                Text("Refresh Messages")
+            }
+            LazyColumn {
+                items(items) {
+                    ElevatedCard(
                         modifier = modifier
-                            .padding(start = 24.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
-                        color = MaterialTheme.colorScheme.primary,
-//                        textAlign = TextAlign.Justify,
-                        text = "${it.content}"
+                            .padding(start = 24.dp, bottom = 16.dp)
                     )
+                    {
+                        Text(
+                            fontWeight = FontWeight.Bold,
+                            color = MaterialTheme.colorScheme.secondary,
+                            text = "Subject: ${it.subject}"
+                        )
+                        Text(
+                            modifier = modifier
+                                .padding(start = 24.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+                            color = MaterialTheme.colorScheme.primary,
+    //                        textAlign = TextAlign.Justify,
+                            text = "${it.content}"
+                        )
+                    }
                 }
             }
         }
@@ -115,6 +131,7 @@ fun UserMessagesScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             UserMessagesScreen(
+                userProp = "test user",
                 items = listOf(
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("boats", "this is a test2", "Hubert Bonisseur de La Bath"),
@@ -130,6 +147,7 @@ fun UserMessagesScreenPreview() {
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     ),
+                onComposerNavigationCb = {},
             ) {
                 Log.d("UserMessagesScreenPreview", "stub refreshCb fired" )
             }

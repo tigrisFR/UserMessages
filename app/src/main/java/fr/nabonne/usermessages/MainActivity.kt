@@ -16,13 +16,21 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import fr.nabonne.usermessages.data.localstorage.LocalStoreImpl
 import fr.nabonne.usermessages.data.network.RemoteApiImpl
 import fr.nabonne.usermessages.domain.LocalStore
 import fr.nabonne.usermessages.domain.RemoteApi
 import fr.nabonne.usermessages.domain.model.Message
 import fr.nabonne.usermessages.ui.allmessagescreen.AllMessagesScreen
+import fr.nabonne.usermessages.ui.allmessagescreen.allMessagesScreen
+import fr.nabonne.usermessages.ui.messagecomposerscreen.messageComposerScreen
+import fr.nabonne.usermessages.ui.messagecomposerscreen.navigateToComposer
 import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
+import fr.nabonne.usermessages.ui.usermessagesscreen.navigateToUserMessages
+import fr.nabonne.usermessages.ui.usermessagesscreen.userMessagesScreen
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -44,33 +52,29 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    //TODO properly bring these in a Usecase and a viewModel
-                    val coroutineScope = rememberCoroutineScope()
-                    val postCb: () -> Unit = remember {
-                        {
-                            coroutineScope.launch(Dispatchers.IO) {
-                                val messageUniqueContent = UUID.randomUUID()
-                                remoteApi.postMessage(
-                                    message = Message(
-                                        author = "dan",
-                                        subject = "pets",
-                                        content = "cats are grumpy $messageUniqueContent"
-                                    )
-                                )
+                    val navController = rememberNavController()
+                    NavHost(
+                        navController = navController,
+                        startDestination = fr.nabonne.usermessages.ui.allmessagescreen.ROUTE
+                    ) {
+                        allMessagesScreen(
+                            onComposerNavigationCb = {
+                                navController.navigateToComposer(it)
+                            },
+                            onUserNavigationCb = {
+                                navController.navigateToUserMessages(it)
                             }
-                        }
-                    }
-                    Scaffold(
-                        floatingActionButton = {
-                            LargeFloatingActionButton(
-                                onClick = postCb,
-                                shape = CircleShape,) {
-                                Icon(Icons.Default.Create, contentDescription = "Add")
+                        )
+                        userMessagesScreen(
+                            onComposerNavigationCb = {
+                                navController.navigateToComposer(it)
                             }
-                        },
-                    ) { innerPadding ->
-                        AllMessagesScreen(modifier = Modifier
-                            .padding(innerPadding))
+                        )
+                        messageComposerScreen(
+                            onMessageSentNavigationCb = {
+                                navController.popBackStack()
+                            }
+                        )
                     }
                 }
             }

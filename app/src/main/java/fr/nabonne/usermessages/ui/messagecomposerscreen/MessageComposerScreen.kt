@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -39,7 +40,8 @@ import java.util.UUID
 @Composable
 fun MessageComposerScreen(
     modifier: Modifier = Modifier,
-    onMessageSentCb: () -> Unit,
+    userProp: String?,
+    onMessageSentNavigationCb: () -> Unit,
 ) {
     //TODO proper DI
     val viewModel: MessageComposerScreenViewModel = viewModel(
@@ -48,36 +50,43 @@ fun MessageComposerScreen(
         }
     )
     val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(state) {
-        if (state is MessageComposerScreenViewModel.UiState.SENT)
-            onMessageSentCb.invoke()
-    }
+//    LaunchedEffect(state) {
+//        if (state is MessageComposerScreenViewModel.UiState.SENT)
+//            onMessageSentNavigationCb.invoke()
+//    }
     MessageComposerScreen(
         modifier = modifier,
-        state,
-        viewModel.uiInputs
+        userProp = userProp,
+        state = state,
+        viewModelInputs = viewModel.uiInputs
     ) { message -> viewModel.postMessage(message) }
 }
 
 
 @Composable
 internal fun MessageComposerScreen(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
+    userProp: String?,
     state: MessageComposerScreenViewModel.UiState,
     viewModelInputs: MutableStateFlow<Message>,
     postCb: (Message) -> Unit,
 ) {
 
-    val fakeAuthors = remember {
-        listOf("dan", "bob", "Hubert Bonisseur de La Bath")
-    }
+//    val fakeAuthors = remember {
+//        listOf("dan", "bob", "Hubert Bonisseur de La Bath")
+//    }
     val messageUniqueContent = UUID.randomUUID()
-    val random = Random().nextInt()
+//    val random = Random().nextInt()
 
+//    var message by remember { mutableStateOf(Message(
+//        author = "${fakeAuthors[random.mod(fakeAuthors.size)]}",
+//        subject = "pets",
+//        content = "cats are grumpy $messageUniqueContent"
+//    )) }
     var message by remember { mutableStateOf(Message(
-        author = "${fakeAuthors[random.mod(fakeAuthors.size)]}",
-        subject = "pets",
-        content = "cats are grumpy $messageUniqueContent"
+        author = userProp ?: "prefilled author",
+        subject = "prefilled subject",
+        content = "prefilled $messageUniqueContent",
     )) }
     Scaffold(
         floatingActionButton = {
@@ -137,6 +146,7 @@ fun ScreenByAuthorPreview() {
         ) {
             MessageComposerScreen(
                 state = MessageComposerScreenViewModel.UiState.NOT_READY_TO_SEND,
+                userProp = null,
                 viewModelInputs = MutableStateFlow(Message("", "", "")),
                 postCb = {}
             )

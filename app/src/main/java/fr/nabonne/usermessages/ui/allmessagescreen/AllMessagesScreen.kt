@@ -3,67 +3,86 @@ package fr.nabonne.usermessages.ui.allmessagescreen
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.nabonne.usermessages.MainActivity
 import fr.nabonne.usermessages.domain.GetAllMessagesUseCaseImpl
 import fr.nabonne.usermessages.domain.model.Message
 import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.UUID
 
 
 @Composable
 fun AllMessagesScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onUserNavigationCb: (user: String) -> Unit,
+    onComposerNavigationCb: (user: String?) -> Unit,
 ) {
-    //TODO get ViewModel from ViewModelStoreOwner through lifecycle-viewmodel-compose
-    //TODO proper DI
-    val getAllMessagesViewModel = AllMessagesScreenViewModel(
-        GetAllMessagesUseCaseImpl(
-            remoteApi = MainActivity.remoteApi,
-            localStore = MainActivity.localStore
+    Scaffold(
+        floatingActionButton = {
+            LargeFloatingActionButton(
+                onClick = { onComposerNavigationCb(null) },
+                shape = CircleShape,) {
+                Icon(Icons.Default.Create, contentDescription = "Compose")
+            }
+        },
+    ) { innerPadding ->
+        //TODO proper DI
+        val allMessagesViewModel: AllMessagesScreenViewModel = viewModel(
+            initializer = {
+                AllMessagesScreenViewModel(
+                    GetAllMessagesUseCaseImpl(
+                        remoteApi = MainActivity.remoteApi,
+                        localStore = MainActivity.localStore
+                    )
+                )
+            }
         )
-    )
 
-    val refreshCb: () -> Unit = remember {
-        { getAllMessagesViewModel.refresh() }
+        val refreshCb: () -> Unit = remember {
+            { allMessagesViewModel.refresh() }
+        }
+        val uiState by allMessagesViewModel.state.collectAsStateWithLifecycle()
+        AllMessagesScreen(
+            modifier = modifier.padding(innerPadding),
+            uiState = uiState,
+            onUserNavigationCb = onUserNavigationCb,
+            refreshCb = refreshCb,
+        )
     }
-    //TODO use collectAsStateWithLifecycle
-    val uiState by getAllMessagesViewModel.state.collectAsStateWithLifecycle()
-    AllMessagesScreen(
-        uiState = uiState,
-        refreshCb = refreshCb,
-    )
 }
 
 @Composable
 fun AllMessagesScreen(
     modifier: Modifier = Modifier,
     uiState: AllMessagesScreenViewModel.UiState,
+    onUserNavigationCb: (user: String) -> Unit,
     refreshCb: () -> Unit,
 ) {
     Column {
@@ -77,13 +96,22 @@ fun AllMessagesScreen(
         }
         when (uiState) {
             is AllMessagesScreenViewModel.UiState.ByAuthor -> {
-                LazyColumnByAuthor(map = uiState.map)
+                LazyColumnByAuthor(
+                    map = uiState.map,
+                    onUserNavigationCb = onUserNavigationCb,
+                )
             }
             is AllMessagesScreenViewModel.UiState.BySubject -> {
-                LazyColumnBySubject(map = uiState.map)
+                LazyColumnBySubject(
+                    map = uiState.map,
+                    onUserNavigationCb = onUserNavigationCb,
+                )
             }
             is AllMessagesScreenViewModel.UiState.InOrder -> {
-                LazyColumnInOrder(messages = uiState.list )
+                LazyColumnInOrder(
+                    messages = uiState.list,
+                    onUserNavigationCb = onUserNavigationCb,
+                )
             }
         }
     }
@@ -94,7 +122,8 @@ fun AllMessagesScreen(
 fun LazyColumnByAuthor(
     modifier: Modifier = Modifier.fillMaxWidth(),
     //TODO use snapshotMap
-    map: Map<String, List<Message>>
+    map: Map<String, List<Message>>,
+    onUserNavigationCb: (user: String) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
         map.forEach {
@@ -104,42 +133,52 @@ fun LazyColumnByAuthor(
                         defaultElevation = 8.dp
                     ),
                     modifier = Modifier.padding(bottom = 8.dp),
-                    onClick = {  }
+                    onClick = { onUserNavigationCb }
                 ) {
                     Text(
                         text = it.key,
                     )
                 }
             }
-            items(it.value) {
-                ElevatedCard(
-                    modifier = modifier
-                        .padding(start = 24.dp, bottom = 16.dp)
-                )
-                {
-                    Text(
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.secondary,
-                        text = "Subject: ${it.subject}"
-                    )
-                    Text(
-                        modifier = modifier
-                            .padding(start = 24.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
-                        color = MaterialTheme.colorScheme.primary,
-//                        textAlign = TextAlign.Justify,
-                        text = "${it.content}")
-                }
+            items(it.value) { message ->
+                MessageCard(message = message)
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun MessageCard(
+    modifier: Modifier = Modifier,
+    message: Message,
+) {
+    ElevatedCard(
+        modifier = modifier
+            .padding(start = 24.dp, bottom = 16.dp)
+    )
+    {
+        Text(
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.secondary,
+            text = "Subject: ${message.subject}"
+        )
+        Text(
+            modifier = modifier
+                .padding(start = 24.dp, end = 6.dp, top = 6.dp, bottom = 6.dp),
+            color = MaterialTheme.colorScheme.primary,
+//                        textAlign = TextAlign.Justify,
+            text = "${message.content}"
+        )
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
 @Composable
 fun LazyColumnBySubject(
     modifier: Modifier = Modifier.fillMaxWidth(),
     //TODO use snapshotMap
-    map: Map<String, List<Message>>
+    map: Map<String, List<Message>>,
+    onUserNavigationCb: (user: String) -> Unit,
 ) {
     LazyColumn(modifier = modifier) {
         map.forEach {
@@ -149,7 +188,7 @@ fun LazyColumnBySubject(
                         defaultElevation = 8.dp
                     ),
                     modifier = Modifier.padding(bottom = 8.dp),
-                    onClick = {  }
+                    onClick = { /*TODO screen by subject*/ }
                 ) {
                     Text(
                         text = "Subject: ${it.key}",
@@ -159,7 +198,8 @@ fun LazyColumnBySubject(
             items(it.value) {
                 ElevatedCard(
                     modifier = modifier
-                        .padding(start = 24.dp, bottom = 16.dp)
+                        .padding(start = 24.dp, bottom = 16.dp),
+                    onClick = { onUserNavigationCb(it.author) }
                 )
                 {
                     Text(
@@ -182,16 +222,25 @@ fun LazyColumnBySubject(
 @Composable
 fun LazyColumnInOrder(
     modifier: Modifier = Modifier.fillMaxWidth(),
-    messages: List<Message>
+    messages: List<Message>,
+    onUserNavigationCb: (user: String) -> Unit,
 ) {
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         items(messages) {
-            Row {
-                Text("From: ${it.author}")
-                Column {
-                    Text("Subject: ${it.subject}")
-                    Text("Msg: ${it.content}")
+            Column {
+                ElevatedButton(
+                    elevation = ButtonDefaults.buttonElevation(
+                        defaultElevation = 8.dp
+                    ),
+                    modifier = Modifier.padding(bottom = 8.dp),
+                    onClick = { onUserNavigationCb(it.author) }
+                ) {
+                    Text("${it.author}")
                 }
+                MessageCard(
+                    modifier = modifier,
+                    message = it,
+                )
             }
         }
     }
@@ -240,6 +289,7 @@ fun ScreenByAuthorPreview() {
                     ""
                 ),
                 refreshCb = {},
+                onUserNavigationCb = {},
             )
         }
     }
@@ -282,6 +332,35 @@ fun ScreenBySubjectPreview() {
                     ),
                     ""
                 ),
+                refreshCb = {},
+                onUserNavigationCb = {},
+            )
+        }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Full Preview", showSystemUi = true)
+@Preview(showBackground = true)
+@Composable
+fun ScreenInOrderPreview() {
+    UserMessagesTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            AllMessagesScreen(
+                uiState = AllMessagesScreenViewModel.UiState.InOrder(
+                    listOf(
+                        Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
+                        Message("boats", "this is a test2", "Hubert Bonisseur de La Bath"),
+                        Message("pets", "this is a test2", "Hubert Bonisseur de La Bath"),
+                    ),
+                    "",
+                ),
+                onUserNavigationCb = {},
                 refreshCb = {},
             )
         }
