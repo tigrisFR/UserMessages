@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
 
-interface RemoteApi {
+interface RetrofitRemoteApi {
 
     @Headers("Content-Type: application/json; charset=UTF-8")
     @POST("/proto/messages")

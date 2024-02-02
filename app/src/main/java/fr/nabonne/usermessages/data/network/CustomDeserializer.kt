@@ -5,6 +5,7 @@ import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParser
 import com.google.gson.reflect.TypeToken
+import fr.nabonne.usermessages.domain.MessageResponse
 import java.lang.reflect.Type
 
 class UserMessagesResponseDeserializer : JsonDeserializer<UserMessagesResponse> {
