@@ -5,6 +5,8 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
+import retrofit2.http.Query
+import retrofit2.http.Url
 
 interface RetrofitRemoteApi {
 
@@ -15,4 +17,8 @@ interface RetrofitRemoteApi {
     @Headers("Content-Type: application/json; charset=UTF-8")
     @GET("/proto/messages")
     suspend fun getAllUserToMessagesMap(): UserMessagesResponse
+
+    @Headers("Content-Type: application/json; charset=UTF-8")
+    @GET
+    suspend fun getMessagesForUserUrlSuffix(@Url relativeUrlWithUserName: String): GetMessagesForAuthorResponse
 }

@@ -17,8 +17,8 @@ class GetMessagesForAuthorUseCaseImpl(
 
     override suspend fun refreshForUser(author: String) {
         withContext(Dispatchers.IO) {
-            val response = remoteApi.fetchMessagesForUser(author)
-            storeResults(author, response)
+            val result = remoteApi.fetchMessagesForUser(author)
+            storeResults(author, result.map { it.toMessageModel(author) })
         }
     }
 

@@ -14,7 +14,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 class GetAllMessagesUseCaseInstrumentedTest {
     val api: RemoteApi = RemoteApiImpl()
@@ -46,7 +45,7 @@ class GetAllMessagesUseCaseInstrumentedTest {
     }
 
     @Test
-    fun postThenFetchByAuthorTest() {
+    fun postThenFetchAllMessagesByAuthorTest() {
         val messageModel = Message(
             author = "Dan",
             subject = "instrumented test",
