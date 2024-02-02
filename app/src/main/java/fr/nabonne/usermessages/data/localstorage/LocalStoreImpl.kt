@@ -25,4 +25,14 @@ class LocalStoreImpl() : LocalStore {
         return _cachedAllMessages.asStateFlow()
     }
 
+    override suspend fun storeMessagesForAuthor(author: String, messages: List<Message>) {
+        //TODO: Implement
+        throw NotImplementedError()
+    }
+
+    override fun getMessagesForAuthor(author: String): StateFlow<Pair<String, List<Message>>> {
+        //TODO: Implement
+        throw NotImplementedError()
+    }
+
 }

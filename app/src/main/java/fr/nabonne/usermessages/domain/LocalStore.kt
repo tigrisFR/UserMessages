@@ -10,4 +10,6 @@ interface LocalStore {
     )
     fun getAllMessagesByUser(): StateFlow<Map<String, List<Message>>>
     fun getAllMessages(): StateFlow<List<Message>>
+    suspend fun storeMessagesForAuthor(author: String, messages: List<Message>)
+    fun getMessagesForAuthor(author: String): StateFlow<Pair<String, List<Message>>>
 }
