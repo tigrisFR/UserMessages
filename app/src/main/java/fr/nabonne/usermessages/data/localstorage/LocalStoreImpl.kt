@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class LocalStoreImpl() : LocalStore {
     private val _cachedAllMessages = MutableStateFlow<List<Message>>(emptyList())
     private val _cachedAllMessagesByUser = MutableStateFlow<Map<String, List<Message>>>(emptyMap())
+    private val _cachedAllMessagesForAuthor = MutableStateFlow<Pair<String, List<Message>>>(Pair("", emptyList()))
     override suspend fun storeAllMessages(
         allMessagesByUser: Map<String, List<Message>>,
         allmessages: List<Message>,
@@ -26,13 +27,25 @@ class LocalStoreImpl() : LocalStore {
     }
 
     override suspend fun storeMessagesForAuthor(author: String, messages: List<Message>) {
-        //TODO: Implement
-        throw NotImplementedError()
+        // TODO: Unit test this fancy merge of Immutable maps and list
+        val mutableMap = _cachedAllMessagesByUser.value.toMutableMap()
+        val existingValues: List<Message> = mutableMap[author] ?: listOf()
+        val newValues: List<Message> = if (existingValues.isEmpty())
+                messages
+            else {
+                messages.filter {
+                    !existingValues.contains(it)
+                }
+            }
+        val nextValues = existingValues + newValues
+        mutableMap[author] = nextValues
+        _cachedAllMessagesByUser.value = mutableMap.toMap()
+        _cachedAllMessages.value = _cachedAllMessages.value + newValues
+        _cachedAllMessagesForAuthor.value = author to nextValues
     }
 
     override fun getMessagesForAuthor(author: String): StateFlow<Pair<String, List<Message>>> {
-        //TODO: Implement
-        throw NotImplementedError()
+        return _cachedAllMessagesForAuthor.asStateFlow()
     }
 
 }
