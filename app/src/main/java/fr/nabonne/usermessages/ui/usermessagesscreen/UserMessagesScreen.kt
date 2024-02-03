@@ -3,8 +3,10 @@ package fr.nabonne.usermessages.ui.usermessagesscreen
 import android.content.res.Configuration
 import android.util.Log
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -12,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -77,11 +80,18 @@ fun UserMessagesScreen(
     Scaffold(
         floatingActionButton = {
             LargeFloatingActionButton(
+//                modifier = Modifier
+//                    .align(Alignment.BottomEnd)
+//                    .padding(16.dp) // normal 16dp of padding for FABs
+//                    .navigationBarsPadding() // padding for navigation bar
+//                    .imePadding(), // padding
                 onClick = { onComposerNavigationCb(null) },
                 shape = CircleShape,) {
                 Icon(Icons.Default.Create, contentDescription = "Compose")
             }
         },
+        floatingActionButtonPosition = FabPosition.End,
+        contentWindowInsets = WindowInsets.safeDrawing,
     ) { innerPadding ->
         Column(modifier = modifier.padding(innerPadding)) {
             Button(
@@ -144,6 +154,9 @@ fun UserMessagesScreenPreview() {
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("planes", "this is a test1", "Hubert Bonisseur de La Bath"),
+                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
+                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
+                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
                     ),

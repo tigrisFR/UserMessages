@@ -6,7 +6,7 @@ import kotlinx.coroutines.withContext
 
 interface ComposeMessageUseCase {
     suspend fun sendMessage()
-    fun updateMessage(draftVersion: Message): Boolean
+    suspend fun updateMessage(draftVersion: Message): Boolean
 }
 
 class ComposeMessageUseCaseImpl(
@@ -14,7 +14,7 @@ class ComposeMessageUseCaseImpl(
 ): ComposeMessageUseCase {
     var messageDraft: Message = Message("","", "")
 
-    override fun updateMessage(draftVersion: Message): Boolean {
+    override suspend fun updateMessage(draftVersion: Message): Boolean {
         messageDraft = draftVersion
         //TODO add storing draft to local store
         return validateMessage(messageDraft)

@@ -19,7 +19,10 @@ fun NavGraphBuilder.messageComposerScreen(
     onMessageSentNavigationCb: () -> Unit
 ) {
     composable("$ROUTE_PREFIX/{$USER_ID_ARG}") {
-        val user = it.arguments?.getString(USER_ID_ARG)
-        MessageComposerScreen(userProp = user, onMessageSentNavigationCb = onMessageSentNavigationCb)
+        var user = it.arguments?.getString(USER_ID_ARG)
+        MessageComposerScreen(
+            userProp = if (user == "null") null else user,
+            onMessageSentNavigationCb = onMessageSentNavigationCb,
+        )
     }
 }

@@ -3,9 +3,12 @@ package fr.nabonne.usermessages.ui.allmessagescreen
 import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -16,6 +19,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +48,22 @@ fun AllMessagesScreen(
     onUserNavigationCb: (user: String) -> Unit,
     onComposerNavigationCb: (user: String?) -> Unit,
 ) {
+    //TODO proper DI
+    val allMessagesViewModel: AllMessagesScreenViewModel = viewModel(
+        initializer = {
+            AllMessagesScreenViewModel(
+                GetAllMessagesUseCaseImpl(
+                    remoteApi = MainActivity.remoteApi,
+                    localStore = MainActivity.localStore
+                )
+            )
+        }
+    )
+
+    val refreshCb: () -> Unit = remember {
+        { allMessagesViewModel.refresh() }
+    }
+    val uiState by allMessagesViewModel.state.collectAsStateWithLifecycle()
     Scaffold(
         floatingActionButton = {
             LargeFloatingActionButton(
@@ -52,23 +72,9 @@ fun AllMessagesScreen(
                 Icon(Icons.Default.Create, contentDescription = "Compose")
             }
         },
+        floatingActionButtonPosition = FabPosition.End,
+        contentWindowInsets = WindowInsets.safeDrawing,
     ) { innerPadding ->
-        //TODO proper DI
-        val allMessagesViewModel: AllMessagesScreenViewModel = viewModel(
-            initializer = {
-                AllMessagesScreenViewModel(
-                    GetAllMessagesUseCaseImpl(
-                        remoteApi = MainActivity.remoteApi,
-                        localStore = MainActivity.localStore
-                    )
-                )
-            }
-        )
-
-        val refreshCb: () -> Unit = remember {
-            { allMessagesViewModel.refresh() }
-        }
-        val uiState by allMessagesViewModel.state.collectAsStateWithLifecycle()
         AllMessagesScreen(
             modifier = modifier.padding(innerPadding),
             uiState = uiState,
@@ -85,7 +91,7 @@ fun AllMessagesScreen(
     onUserNavigationCb: (user: String) -> Unit,
     refreshCb: () -> Unit,
 ) {
-    Column {
+    Column(modifier = modifier){
         Button(
             modifier = Modifier
                 .padding(8.dp)
@@ -97,18 +103,21 @@ fun AllMessagesScreen(
         when (uiState) {
             is AllMessagesScreenViewModel.UiState.ByAuthor -> {
                 LazyColumnByAuthor(
+                    modifier = modifier,
                     map = uiState.map,
                     onUserNavigationCb = onUserNavigationCb,
                 )
             }
             is AllMessagesScreenViewModel.UiState.BySubject -> {
                 LazyColumnBySubject(
+                    modifier = modifier,
                     map = uiState.map,
                     onUserNavigationCb = onUserNavigationCb,
                 )
             }
             is AllMessagesScreenViewModel.UiState.InOrder -> {
                 LazyColumnInOrder(
+                    modifier = modifier,
                     messages = uiState.list,
                     onUserNavigationCb = onUserNavigationCb,
                 )

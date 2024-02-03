@@ -3,37 +3,23 @@ package fr.nabonne.usermessages
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Create
-import androidx.compose.material3.Icon
-import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import fr.nabonne.usermessages.data.localstorage.LocalStoreImpl
 import fr.nabonne.usermessages.data.network.RemoteApiImpl
 import fr.nabonne.usermessages.domain.LocalStore
 import fr.nabonne.usermessages.domain.RemoteApi
-import fr.nabonne.usermessages.domain.model.Message
-import fr.nabonne.usermessages.ui.allmessagescreen.AllMessagesScreen
 import fr.nabonne.usermessages.ui.allmessagescreen.allMessagesScreen
 import fr.nabonne.usermessages.ui.messagecomposerscreen.messageComposerScreen
 import fr.nabonne.usermessages.ui.messagecomposerscreen.navigateToComposer
 import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
 import fr.nabonne.usermessages.ui.usermessagesscreen.navigateToUserMessages
 import fr.nabonne.usermessages.ui.usermessagesscreen.userMessagesScreen
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.util.UUID
 
 class MainActivity : ComponentActivity() {
     //TODO: proper Dependency injection
@@ -43,6 +29,7 @@ class MainActivity : ComponentActivity() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         setContent {
@@ -55,7 +42,7 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
-                        startDestination = fr.nabonne.usermessages.ui.allmessagescreen.ROUTE
+                        startDestination = fr.nabonne.usermessages.ui.allmessagescreen.ROUTE,
                     ) {
                         allMessagesScreen(
                             onComposerNavigationCb = {
