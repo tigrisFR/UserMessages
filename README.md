@@ -2,7 +2,7 @@
 
 ## TESTING
 - All 3 use-cases work
-- The GET use-cases will require you to click fetch: the ViewModel don't fetch upon init so I could correctly debug the post and get in succession. It would be very simple to put a fetch call in the init blocks in each of these ViewModels.
+- The GET use-cases will require you to click fetch before displaying results: indeed the ViewModels don't fetch upon initialization. This is so that I could correctly debug the post and get requests in succession. It would be very simple to put a fetch call in the init blocks in each of these ViewModels though.
 - I focused on instrumented tests as they helped me debugging various issues with the remote API and rule out where it came from (took me a VERY long time to figure out that the body JSON objects are actually stringified and I ended up making custom deserializer for these.
 
 **Run instrumented test from Android studio or gradle wrapper from the command line to easily post Messages to the endpoint.**
