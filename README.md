@@ -6,8 +6,8 @@
 - I focused on instrumented tests as they helped me debugging various issues with the remote API and rule out where it came from (took me a VERY long time to figure out that the body JSON objects are actually stringified and I ended up making custom deserializer for these.
 
 **Run instrumented test from Android studio or gradle wrapper from the command line to easily post Messages to the endpoint.**
-./gradlew connectedAndroidTest
-They will appear in your /app/build/reports/androidTests/connected/ folder from the project root directory.
+```./gradlew connectedAndroidTest```
+They will appear in your ```/app/build/reports/androidTests/connected/``` folder from the project root directory.
 
 Future directions would focus on building unit tests and more instrumented tests e.g. UI Compose instrumented tests via https://developer.android.com/jetpack/compose/testing-cheatsheet 
 -> Then hooking it up to gitHub actions to run automatically
@@ -23,12 +23,12 @@ Cheers !
 The lack of message unique identifier makes it hard for storing messages locally and sync with remote.
 -> Note that we could hack a UUID and insert/extract it from the message message JSON field
 
-**Essentially we are going to focus on implementing 3 use-cases (one for each remote Api call.**
+**Essentially we are going to focus on implementing 3 use-cases (one for each remote Api call).**
 
 The UI needs to provide a screen for each use case/ each api call
-- a AllMessages screen: displays all messages grouped by users and can be refreshed to get new ones.
-- a UserMessages screen: same as above but displays only the ones sent by that user
-- a Message Composer screen: allows to create a Message from scratch
+- a **AllMessages** screen: displays all messages grouped by users and can be refreshed to get new ones.
+- a ***UserMessages** screen: same as above but displays only the ones sent by that user
+- a **Message Composer** screen: allows to create a Message from scratch
 	whatever user name is used is stored to SharedPref and prepopulates the field next time
 - a HomeScreen that allows to navigate to all these separate screens
 
@@ -45,26 +45,26 @@ Message Composer screen by clicking a floating button**
 
 
 ## ENTITIES
-  The GET endpoints only expose one: a UserMessages entity.
+  The GET endpoints only expose one: a ```UserMessages``` entity.
   While we may hope to have a more granular User AND Message entities setup where User has a 1 to many relationship with Message,
   and Message holds the sender user's name, we have to make do.
   
-  UserMessage contain a name: we will make the assumption that it's unique and serves as a user unique identifier.
+  ```UserMessages``` contain a name: we will make the **assumption that it's unique** and serves as a user unique identifier.
 	
 
 ## MODELS
 It's tempting to not even bother making a Model for User since all the data we need for our use-cases can be stored in a MessageModel:
 
-  ### MessageModel
+  ### ```MessageModel```
 		- subject: from "subject" JSON field
 	 	- text: from "message" JSON field
 	 	- author: from "user" JSON field *as a bonus perhaps*
 
 **But let's drill down:**
-#### cons:
+#### ```cons:```
 - we'd lose the straightforward conversion from JSON. Aligning with remote API calls is often a good practice to avoid a convoluted architecture and obscure client-specific business logic that slows down feature development
 - if when showing all messages, we really want to only show them grouped by author: then flattening them into a giant list of MessageModel without a use-case to justify it causes 2 hits in performance (when flattening from JSON and again when grouping them by User for UI) 
-#### pros:
+#### ```pros:```
 - handling a flat list of message would streamline storing to db for offline use
 - handling nested list can easily cause UI performance issues (as the LazyList or RecyclerView cannot properly predict the size of the nested list)
 from a UI standpoint it would actually be beneficial to flatten the data in a list and group its element by username to then show them in a single list.
@@ -76,7 +76,7 @@ Uncertainty about API:
 - messages may be appearing in chronological order
 **-> Both these would hint at using the "flattening" approach**
 
-### UserMessageModel * perhaps not needed *
+### ```UserMessageModel``` *perhaps not needed*
 		- username: from "user" JSON field
 		- List<MessageModel>
   
