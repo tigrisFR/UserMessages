@@ -1,5 +1,24 @@
-# UserMessages
+# UserMessages Design and Development Notes
 
+TESING:
+- All 3 use-cases work
+- The GET use-cases will require you to click fetch: the ViewModel don't fetch upon init so I could correctly debug the post and get in succession. It would be very simple to put a fetch call in the init blocks in each of these ViewModels.
+- I focused on instrumented tests as they helped me debugging various issues with the remote API and rule out where it came from (took me a VERY long time to figure out that the body JSON objects are actually stringified and I ended up making custom deserializer for these.
+
+**Run instrumented test from Android studio or gradle wrapper from the command line to easily post Messages to the endpoint.**
+./gradlew connectedAndroidTest
+They will appear in your /app/build/reports/androidTests/connected/ folder from the project root directory.
+
+Future directions would focus on building unit tests and more instrumented tests e.g. UI Compose instrumented tests via https://developer.android.com/jetpack/compose/testing-cheatsheet 
+-> Then hooking it up to gitHub actions to run automatically
+-> for each push you could also require to run some static checks like Lint and Unit tests in the modules impacted
+
+I blew past the alloted time but I had a lot of fun.
+
+Cheers !
+
+-------------------
+*** NOTES BELOW ***
 
 The lack of message unique identifier makes it hard for storing messages locally and sync with remote.
 -> Note that we could hack a UUID and insert/extract it from the message message JSON field
