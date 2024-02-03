@@ -78,7 +78,7 @@ internal fun MessageComposerScreen(
     postCb: (Message) -> Unit,
 ) {
 
-    var author by remember { mutableStateOf("prefilled author") }
+    var author by remember { mutableStateOf(userProp ?: "prefilled author") }
     var subject by remember { mutableStateOf("prefilled subject") }
     var content by remember {
         mutableStateOf(

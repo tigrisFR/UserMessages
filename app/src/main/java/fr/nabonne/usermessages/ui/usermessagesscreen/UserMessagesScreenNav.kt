@@ -12,7 +12,10 @@ fun NavController.navigateToUserMessages(
     user: String,
     navOptions: NavOptions? = null,
 ) {
-    this.navigate("$ROUTE_PREFIX/$user", navOptions)
+    this.navigate(
+        route = "$ROUTE_PREFIX/${user?.trim()}",
+        navOptions = navOptions,
+    )
 }
 
 private const val USER_ID_ARG = "user"

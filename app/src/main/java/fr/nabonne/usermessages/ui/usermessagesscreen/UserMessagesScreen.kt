@@ -63,11 +63,12 @@ fun UserMessagesScreen(
     val refreshCb: () -> Unit = remember {
         { userMessagesScreenViewModel.refresh() }
     }
+    val onComposerNavigationCb: (String?) -> Unit = remember {{ onComposerNavigationCb(userProp) }}
     val uiState by userMessagesScreenViewModel.state.collectAsStateWithLifecycle(emptyList())
     UserMessagesScreen(
         userProp = userProp,
         items = uiState,
-        onComposerNavigationCb = { onComposerNavigationCb },
+        onComposerNavigationCb = onComposerNavigationCb,
         refreshCb = refreshCb,
         )
 }
@@ -103,7 +104,8 @@ fun UserMessagesScreen(
 //                    .navigationBarsPadding() // padding for navigation bar
 //                    .imePadding(), // padding
                 onClick = { onComposerNavigationCb(userProp) },
-                shape = CircleShape,) {
+                shape = CircleShape,
+            ) {
                 Icon(Icons.Default.Create, contentDescription = "Compose")
             }
         },
