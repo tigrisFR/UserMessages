@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -21,6 +22,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -69,6 +72,7 @@ fun UserMessagesScreen(
         )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserMessagesScreen(
     modifier: Modifier = Modifier.fillMaxSize(),
@@ -78,6 +82,19 @@ fun UserMessagesScreen(
     refreshCb: () -> Unit,
 ) {
     Scaffold(
+        topBar = {
+            TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.primary,
+                ),
+                title = {
+                    Text(
+                        text = "From: $userProp"
+                    )
+                }
+            )
+        },
         floatingActionButton = {
             LargeFloatingActionButton(
 //                modifier = Modifier
@@ -85,7 +102,7 @@ fun UserMessagesScreen(
 //                    .padding(16.dp) // normal 16dp of padding for FABs
 //                    .navigationBarsPadding() // padding for navigation bar
 //                    .imePadding(), // padding
-                onClick = { onComposerNavigationCb(null) },
+                onClick = { onComposerNavigationCb(userProp) },
                 shape = CircleShape,) {
                 Icon(Icons.Default.Create, contentDescription = "Compose")
             }

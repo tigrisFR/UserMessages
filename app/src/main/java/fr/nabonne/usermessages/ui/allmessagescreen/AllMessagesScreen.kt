@@ -142,7 +142,7 @@ fun LazyColumnByAuthor(
                         defaultElevation = 8.dp
                     ),
                     modifier = Modifier.padding(bottom = 8.dp),
-                    onClick = { onUserNavigationCb }
+                    onClick = { onUserNavigationCb(it.key) }
                 ) {
                     Text(
                         text = it.key,
