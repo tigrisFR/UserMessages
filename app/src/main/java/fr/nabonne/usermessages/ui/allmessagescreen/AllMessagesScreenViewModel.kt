@@ -2,7 +2,11 @@ package fr.nabonne.usermessages.ui.allmessagescreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.nabonne.usermessages.MainActivity
+import fr.nabonne.usermessages.di.UserMessagesApp
+import fr.nabonne.usermessages.di.UserMessagesApp.Companion.useCasesSubModule
 import fr.nabonne.usermessages.domain.GetAllMessagesUseCase
+import fr.nabonne.usermessages.domain.GetAllMessagesUseCaseImpl
 import fr.nabonne.usermessages.domain.model.Message
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AllMessagesScreenViewModel(
-    val usecase: GetAllMessagesUseCase
+    private val usecase: GetAllMessagesUseCase = UserMessagesApp.appModule.useCasesSubModule.injectGetAllMessagesUseCase(),
     //TODO fetch the SaveStateHandler to restore across process death
 ) : ViewModel() {
     sealed class UiState {

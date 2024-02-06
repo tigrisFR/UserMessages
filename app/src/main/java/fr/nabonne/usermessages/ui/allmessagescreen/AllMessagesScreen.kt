@@ -51,12 +51,7 @@ fun AllMessagesScreen(
     //TODO proper DI
     val allMessagesViewModel: AllMessagesScreenViewModel = viewModel(
         initializer = {
-            AllMessagesScreenViewModel(
-                GetAllMessagesUseCaseImpl(
-                    remoteApi = MainActivity.remoteApi,
-                    localStore = MainActivity.localStore
-                )
-            )
+            AllMessagesScreenViewModel()
         }
     )
 

@@ -51,10 +51,6 @@ fun UserMessagesScreen(
         initializer = {
             UserMessagesScreenViewModel(
                 user = userProp,
-                usecase = GetMessagesForAuthorUseCaseImpl(
-                    remoteApi = MainActivity.remoteApi,
-                    localStore = MainActivity.localStore
-                ),
 //                savedStateHandle = this.createSavedStateHandle(),
             )
         }

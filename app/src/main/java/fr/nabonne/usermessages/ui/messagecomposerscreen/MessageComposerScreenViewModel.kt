@@ -2,6 +2,8 @@ package fr.nabonne.usermessages.ui.messagecomposerscreen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import fr.nabonne.usermessages.di.UserMessagesApp
+import fr.nabonne.usermessages.di.UserMessagesApp.Companion.useCasesSubModule
 import fr.nabonne.usermessages.domain.ComposeMessageUseCase
 import fr.nabonne.usermessages.domain.model.Message
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +12,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
 class MessageComposerScreenViewModel(
-    val usecase: ComposeMessageUseCase,
+    private val usecase: ComposeMessageUseCase = UserMessagesApp.appModule.useCasesSubModule.injectComposeMessageUseCase(),
     //TODO create SaveStateHandler in our init to restore across process death
 //    val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

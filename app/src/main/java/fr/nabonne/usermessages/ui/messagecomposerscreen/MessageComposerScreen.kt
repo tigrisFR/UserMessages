@@ -33,6 +33,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.nabonne.usermessages.MainActivity
+import fr.nabonne.usermessages.di.UserMessagesApp
 import fr.nabonne.usermessages.domain.ComposeMessageUseCaseImpl
 import fr.nabonne.usermessages.domain.model.Message
 import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
@@ -50,7 +51,7 @@ fun MessageComposerScreen(
     //TODO proper DI
     val screenViewModel: MessageComposerScreenViewModel = viewModel(
         initializer = {
-            MessageComposerScreenViewModel(ComposeMessageUseCaseImpl(MainActivity.remoteApi))
+            MessageComposerScreenViewModel()
         }
     )
     val state by screenViewModel.state.collectAsStateWithLifecycle()
