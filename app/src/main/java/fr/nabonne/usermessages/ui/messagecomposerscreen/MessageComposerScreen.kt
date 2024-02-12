@@ -88,7 +88,7 @@ internal fun MessageComposerScreen(
     }
 
     LaunchedEffect(author, subject, content) {
-        while (isActive) {
+        if (isActive) {
             delay(500)
             updateDraftCb(
                 Message(
