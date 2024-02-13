@@ -20,6 +20,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -28,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -91,6 +93,9 @@ internal fun MessageComposerScreen(
             )
         }
     }
+    val isReadyToSend = remember (state) {
+        state is MessageComposerScreenViewModel.UiState.READY_TO_SEND
+    }
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     Scaffold(
@@ -115,6 +120,10 @@ internal fun MessageComposerScreen(
                         }
                     }
                 },
+                // Modify the appearance to reflect disabled state
+                containerColor = if (isReadyToSend) MaterialTheme.colorScheme.primary else Color.Gray,
+                // Optional: Adjust content color to match the enabled/disabled state
+                contentColor = if (isReadyToSend) contentColorFor(backgroundColor = MaterialTheme.colorScheme.primary) else Color.LightGray,
                 shape = CircleShape,
             ) {
                 Icon(Icons.Default.Create, contentDescription = "Compose")
@@ -151,6 +160,31 @@ internal fun MessageComposerScreen(
 @Preview(showBackground = true)
 @Composable
 fun ScreenByAuthorPreview() {
+    UserMessagesTheme {
+        // A surface container using the 'background' color from the theme
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            MessageComposerScreen(
+                state = MessageComposerScreenViewModel.UiState.READY_TO_SEND,
+                userProp = null,
+                viewModelInputs = MutableStateFlow(
+                    MessageComposerScreenViewModel.UiInput.UpdateDraft(
+                        Message("Dan", "ducks", "quack")
+                    )
+                ),
+            )
+        }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Preview(name = "Full Preview", showSystemUi = true)
+@Preview(showBackground = true)
+@Composable
+fun ScreenByAuthorPreviewFabDisabled() {
     UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
