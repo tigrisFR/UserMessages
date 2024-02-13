@@ -27,50 +27,55 @@ class MessageComposerScreenViewModel(
     private val _state: MutableStateFlow<UiState> = MutableStateFlow(UiState.NOT_READY_TO_SEND)
     val state = _state.asStateFlow()
 
-//    val uiInputs = MutableStateFlow(Message("", "", ""))
-//
-//    init {
-//        //TODO better state management
-//        viewModelScope.launch {
-//            uiInputs.debounce(2000).collect {
-//                if (_state.value == UiState.SENDING ||
-//                      _state.value == UiState.SENT)
-//                    return@collect
-//                _state.value = if (usecase.updateMessage(it))
-//                    UiState.READY_TO_SEND
-//                else
-//                    UiState.NOT_READY_TO_SEND
-//            }
-//        }
-//    }
+    val uiInputs = MutableStateFlow<UiInput>(UiInput.UpdateDraft(Message("", "", "")))
+    sealed class UiInput(open val message: Message) {
+        data class UpdateDraft(override val message: Message) : UiInput(message)
+        data class SendMessage(override val message: Message): UiInput(message)
+    }
 
-    fun updateMessage(message: Message) {
+    init {
         viewModelScope.launch {
-            if (_state.value != UiState.SENDING &&
-                _state.value != UiState.SENT) {
-                if (usecase.updateMessage(message)) {
-                    _state.value = UiState.READY_TO_SEND
+            uiInputs.debounce(500)
+                .collect {
+                    if (state.value == UiState.SENT ||
+                        state.value == UiState.SENDING
+                    ) {
+                        //TODO: make sure we don't get stuck here
+                        //too late to attempt sending nor updating
+                    } else {
+                        val nextStateValue = when (it) {
+                            is UiInput.SendMessage -> {
+                                _state.value = UiState.SENDING
+                                postMessage(it.message)
+                            }
+                            is UiInput.UpdateDraft -> {
+                                updateMessageDraft(it.message)
+                            }
+                        }
+                        _state.value = nextStateValue
+                    }
                 }
-            }
         }
     }
 
-    //TODO revisit concurrency and error handling
-    fun postMessage(message: Message) {
-        viewModelScope.launch {
-            if (_state.value != UiState.READY_TO_SEND)
-                return@launch
-            _state.value = UiState.SENDING
-            try {
-                if (usecase.updateMessage(message)) {
-                    usecase.sendMessage()
-                    _state.value = UiState.SENT
-                } else {
-                    _state.value = UiState.NOT_READY_TO_SEND
-                }
-            } catch (exception: Exception) {
-                _state.value = UiState.NOT_READY_TO_SEND
+    private suspend fun updateMessageDraft(message: Message): UiState {
+        return if (usecase.updateMessageDraft(message)) {
+            UiState.READY_TO_SEND
+        } else
+            UiState.NOT_READY_TO_SEND
+    }
+
+    private suspend fun postMessage(message: Message): UiState {
+        return try {
+            if (usecase.updateMessageDraft(message)) {
+                usecase.sendMessage()
+                UiState.SENT
+            } else {
+                UiState.NOT_READY_TO_SEND
             }
+        } catch (exception: Exception) {
+            //TODO proper error reporting and handling
+            state.value// don't change it
         }
     }
 }

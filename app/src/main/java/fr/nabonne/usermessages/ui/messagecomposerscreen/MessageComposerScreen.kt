@@ -16,7 +16,6 @@ import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
@@ -32,12 +31,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.nabonne.usermessages.MainActivity
-import fr.nabonne.usermessages.di.UserMessagesApp
-import fr.nabonne.usermessages.domain.ComposeMessageUseCaseImpl
 import fr.nabonne.usermessages.domain.model.Message
 import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -63,9 +59,8 @@ fun MessageComposerScreen(
         modifier = modifier,
         userProp = userProp,
         state = state,
-//        viewModelInputs = viewModel.uiInputs,
-        updateDraftCb = { screenViewModel.updateMessage(it)}
-    ) { message -> screenViewModel.postMessage(message) }
+        viewModelInputs = screenViewModel.uiInputs,
+    )
 }
 
 
@@ -74,9 +69,7 @@ internal fun MessageComposerScreen(
     modifier: Modifier = Modifier.fillMaxWidth(),
     userProp: String?,
     state: MessageComposerScreenViewModel.UiState,
-//    viewModelInputs: MutableStateFlow<Message>,
-    updateDraftCb: (Message) -> Unit,
-    postCb: (Message) -> Unit,
+    viewModelInputs: MutableStateFlow<MessageComposerScreenViewModel.UiInput>,
 ) {
 
     var author by remember { mutableStateOf(userProp ?: "prefilled author") }
@@ -89,15 +82,13 @@ internal fun MessageComposerScreen(
 
     LaunchedEffect(author, subject, content) {
         if (isActive) {
-            delay(500)
-            updateDraftCb(
+            viewModelInputs.value = MessageComposerScreenViewModel.UiInput.UpdateDraft(
                 Message(
-                author = author,
-                subject = subject,
-                content = content,
+                    author = author,
+                    subject = subject,
+                    content = content,
                 )
             )
-//            viewModelInputs.value = message
         }
     }
     val scope = rememberCoroutineScope()
@@ -113,13 +104,14 @@ internal fun MessageComposerScreen(
                         if (state !is MessageComposerScreenViewModel.UiState.READY_TO_SEND) {
                             snackbarHostState.showSnackbar("All fields must be filled!")
                         } else {
-                            postCb(
-                                Message(
-                                    author = author,
-                                    subject = subject,
-                                    content = content,
+                            viewModelInputs.value =
+                                MessageComposerScreenViewModel.UiInput.SendMessage(
+                                    Message(
+                                        author = author,
+                                        subject = subject,
+                                        content = content,
+                                    )
                                 )
-                            )
                         }
                     }
                 },
@@ -168,9 +160,11 @@ fun ScreenByAuthorPreview() {
             MessageComposerScreen(
                 state = MessageComposerScreenViewModel.UiState.NOT_READY_TO_SEND,
                 userProp = null,
-//                viewModelInputs = MutableStateFlow(Message("", "", "")),
-                updateDraftCb = {},
-                postCb = {}
+                viewModelInputs = MutableStateFlow(
+                    MessageComposerScreenViewModel.UiInput.UpdateDraft(
+                        Message("", "", "")
+                    )
+                ),
             )
         }
     }
