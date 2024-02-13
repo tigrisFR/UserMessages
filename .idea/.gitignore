@@ -1,3 +1,10 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+/caches
+/libraries
+/modules.xml
+/assetWizardSettings.xml
+/androidTestResultsUserPreferences.xml
+/deploymentTargetDropDown.xml
+/navEditor.xml
