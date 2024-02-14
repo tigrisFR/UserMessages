@@ -8,14 +8,14 @@ import fr.nabonne.usermessages.di.UserMessagesApp
 import fr.nabonne.usermessages.di.UserMessagesApp.Companion.useCasesSubModule
 import fr.nabonne.usermessages.features.composer.messageComposerScreen
 import fr.nabonne.usermessages.features.composer.navigateToComposer
-import fr.nabonne.usermessages.ui.allmessagescreen.allMessagesScreen
-import fr.nabonne.usermessages.ui.usermessagesscreen.navigateToUserMessages
-import fr.nabonne.usermessages.ui.usermessagesscreen.userMessagesScreen
+import fr.nabonne.usermessages.features.allmessages.allMessagesScreen
+import fr.nabonne.usermessages.features.usermessages.navigateToUserMessages
+import fr.nabonne.usermessages.features.usermessages.userMessagesScreen
 
 @Composable
 fun AppNavHost(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = fr.nabonne.usermessages.ui.allmessagescreen.ROUTE,
+    startDestination: String = fr.nabonne.usermessages.features.allmessages.ROUTE,
 ) = NavHost(
     navController = navController,
     startDestination = startDestination,

@@ -1,4 +1,4 @@
-package fr.nabonne.usermessages.ui.usermessagesscreen
+package fr.nabonne.usermessages.features.usermessages
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController

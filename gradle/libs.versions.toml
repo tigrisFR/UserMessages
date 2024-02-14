@@ -4,13 +4,13 @@ androidxLifecycle = "2.7.0"
 androidxNavigation = "2.7.6"
 androidGradlePlugin = "8.2.2"
 kotlin = "1.9.0"
-core-ktx = "1.12.0"
+androidxCoreKtx = "1.12.0"
+androidxAppcompat = "1.6.1"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
-appcompat = "1.6.1"
-material = "1.11.0"
 com-google-android-material-material = "1.11.0"
+#material = "1.11.0"
 
 [libraries]
 androidx-compose-bom =          { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
@@ -25,17 +25,16 @@ lifecycle-runtime-ktx =         { module = "androidx.lifecycle:lifecycle-runtime
 lifecycle-runtime-compose =     { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 navigation-runtime-ktx =    { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "androidxNavigation" }
 navigation-compose =        { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidxCoreKtx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppcompat" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "com-google-android-material-material" }
 #material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [bundles]
 featuremodule-compose = [
-    "androidx-compose-ui",
     "androidx-compose-ui",
     "androidx-compose-ui-graphics",
     "androidx-compose-ui-tooling-preview",
@@ -48,8 +47,8 @@ featuremodule-compose = [
     "navigation-compose",
 ]
 featuremodule-android = [
-    "core-ktx",
-    "appcompat",
+    "androidx-core-ktx",
+    "androidx-appcompat",
 ]
 
 featuremodule-android-test = [

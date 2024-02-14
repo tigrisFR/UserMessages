@@ -1,4 +1,4 @@
-package fr.nabonne.usermessages.ui.usermessagesscreen
+package fr.nabonne.usermessages.features.usermessages
 
 import android.content.res.Configuration
 import android.util.Log
@@ -33,7 +33,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import fr.nabonne.usermessages.core.domain.model.Message
 import fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme
 
