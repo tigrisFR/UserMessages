@@ -42,20 +42,14 @@ android {
 
 dependencies {
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.bundles.android.test)
     //network
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    //ui
+    api(libs.retrofit2.retrofit)// need to expose these for instrumented test in app module
+    implementation(libs.retrofit2.converter.gson)
+    //for ui's theme
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
-//    api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.material3)
-//    api(libs.androidx.compose.ui)
-//    api(libs.androidx.compose.ui.graphics)
-//    api(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.core.ktx)
 }

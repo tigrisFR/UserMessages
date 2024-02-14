@@ -44,8 +44,7 @@ dependencies {
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     implementation(libs.bundles.featuremodule.compose)
-    implementation(libs.bundles.featuremodule.android)
     testImplementation(libs.junit)
     androidTestImplementation(composeBom)
-    androidTestImplementation(libs.bundles.featuremodule.android.test)
+    androidTestImplementation(libs.bundles.android.test)
 }
