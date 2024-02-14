@@ -40,20 +40,11 @@ import fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme
 
 @Composable
 fun UserMessagesScreen(
+    userMessagesScreenViewModel: UserMessagesScreenViewModel,
     modifier: Modifier = Modifier,
     userProp: String,
     onComposerNavigationCb: (String) -> Unit,
 ) {
-    //TODO proper DI
-    val userMessagesScreenViewModel = viewModel(
-        initializer = {
-            UserMessagesScreenViewModel(
-                user = userProp,
-//                savedStateHandle = this.createSavedStateHandle(),
-            )
-        }
-    )
-
     val refreshCb: () -> Unit = remember {
         { userMessagesScreenViewModel.refresh() }
     }

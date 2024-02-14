@@ -40,17 +40,11 @@ import fr.nabonne.usermessages.core.domain.model.Message
 
 @Composable
 fun AllMessagesScreen(
+    allMessagesViewModel: AllMessagesScreenViewModel,
     modifier: Modifier = Modifier,
     onUserNavigationCb: (user: String) -> Unit,
     onComposerNavigationCb: (user: String?) -> Unit,
 ) {
-    //TODO proper DI
-    val allMessagesViewModel: AllMessagesScreenViewModel = viewModel(
-        initializer = {
-            AllMessagesScreenViewModel()
-        }
-    )
-
     val refreshCb: () -> Unit = remember {
         { allMessagesViewModel.refresh() }
     }

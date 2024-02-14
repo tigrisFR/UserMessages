@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class AllMessagesScreenViewModel(
-    private val usecase: GetAllMessagesUseCase = UserMessagesApp.appModule.useCasesSubModule.injectGetAllMessagesUseCase(),
+    private val usecase: GetAllMessagesUseCase,
     //TODO fetch the SaveStateHandler to restore across process death
 ) : ViewModel() {
     sealed class UiState {

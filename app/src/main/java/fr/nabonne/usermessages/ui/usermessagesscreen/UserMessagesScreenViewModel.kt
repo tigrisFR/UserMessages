@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class UserMessagesScreenViewModel(
     val user: String,
-    private val usecase: GetMessagesForAuthorUseCase = UserMessagesApp.appModule.useCasesSubModule.injectGetMessagesForAuthorUseCase(),
+    private val usecase: GetMessagesForAuthorUseCase,
     //TODO fetch the SaveStateHandler to restore across process death
 //    val savedStateHandle: SavedStateHandle
 ) : ViewModel() {

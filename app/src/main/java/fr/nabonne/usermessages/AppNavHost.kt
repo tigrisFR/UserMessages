@@ -21,6 +21,7 @@ fun AppNavHost(
     startDestination = startDestination,
 ) {
     allMessagesScreen(
+        useCasesSubModule = UserMessagesApp.appModule.useCasesSubModule,
         onComposerNavigationCb = {
             navController.navigateToComposer(it)
         },
@@ -29,6 +30,7 @@ fun AppNavHost(
         }
     )
     userMessagesScreen(
+        useCasesSubModule = UserMessagesApp.appModule.useCasesSubModule,
         onComposerNavigationCb = {
             navController.navigateToComposer(it)
         }
