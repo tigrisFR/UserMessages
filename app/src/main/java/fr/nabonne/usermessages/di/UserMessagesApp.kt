@@ -1,12 +1,16 @@
 package fr.nabonne.usermessages.di;
 
 import android.app.Application;
+import fr.nabonne.usermessages.core.domain.di.UseCasesSubModuleImpl
 
 class UserMessagesApp : Application() {
     companion object {
         lateinit var appModule: AppModule
         val AppModule.useCasesSubModule by lazy {
-            UseCasesSubModuleImpl()
+            UseCasesSubModuleImpl(
+                appModule.remoteApi,
+                appModule.localStore,
+            )
         }
     }
 

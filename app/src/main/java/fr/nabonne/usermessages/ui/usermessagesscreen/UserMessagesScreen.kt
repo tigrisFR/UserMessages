@@ -34,10 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.nabonne.usermessages.MainActivity
-import fr.nabonne.usermessages.domain.GetMessagesForAuthorUseCaseImpl
-import fr.nabonne.usermessages.domain.model.Message
-import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
+import fr.nabonne.usermessages.core.domain.model.Message
+import fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme
 
 
 @Composable
@@ -158,26 +156,90 @@ fun UserMessagesScreenPreview() {
             UserMessagesScreen(
                 userProp = "test user",
                 items = listOf(
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("boats", "this is a test2", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test2", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("trains", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("ducks", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("planes", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                    Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
                     ),
+                    Message(
+                        "boats",
+                        "this is a test2",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test2",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "trains",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "ducks",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "planes",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                    Message(
+                        "pets",
+                        "this is a test1",
+                        "Hubert Bonisseur de La Bath"
+                    ),
+                ),
                 onComposerNavigationCb = {},
             ) {
-                Log.d("UserMessagesScreenPreview", "stub refreshCb fired" )
+                Log.d("UserMessagesScreenPreview", "stub refreshCb fired")
             }
         }
     }

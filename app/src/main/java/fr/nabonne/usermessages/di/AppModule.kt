@@ -1,7 +1,7 @@
 package fr.nabonne.usermessages.di
 
-import fr.nabonne.usermessages.domain.LocalStore
-import fr.nabonne.usermessages.domain.RemoteApi
+import fr.nabonne.usermessages.core.domain.data.LocalStore
+import fr.nabonne.usermessages.core.domain.data.RemoteApi
 
 interface AppModule {
     val remoteApi: RemoteApi

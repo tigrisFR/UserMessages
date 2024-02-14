@@ -1,9 +1,9 @@
 package fr.nabonne.usermessages.di
 
-import fr.nabonne.usermessages.data.localstorage.LocalStoreImpl
-import fr.nabonne.usermessages.data.network.RemoteApiImpl
-import fr.nabonne.usermessages.domain.LocalStore
-import fr.nabonne.usermessages.domain.RemoteApi
+import fr.nabonne.usermessages.core.domain.data.LocalStore
+import fr.nabonne.usermessages.core.domain.data.RemoteApi
+import fr.nabonne.usermessages.core.localstorage.LocalStoreImpl
+import fr.nabonne.usermessages.core.network.RemoteApiImpl
 
 class AppModuleDefaultImpl(
 ) : AppModule {

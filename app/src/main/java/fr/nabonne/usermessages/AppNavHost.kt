@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import fr.nabonne.usermessages.di.UserMessagesApp
+import fr.nabonne.usermessages.di.UserMessagesApp.Companion.useCasesSubModule
+import fr.nabonne.usermessages.features.composer.messageComposerScreen
+import fr.nabonne.usermessages.features.composer.navigateToComposer
 import fr.nabonne.usermessages.ui.allmessagescreen.allMessagesScreen
-import fr.nabonne.usermessages.ui.messagecomposerscreen.messageComposerScreen
-import fr.nabonne.usermessages.ui.messagecomposerscreen.navigateToComposer
 import fr.nabonne.usermessages.ui.usermessagesscreen.navigateToUserMessages
 import fr.nabonne.usermessages.ui.usermessagesscreen.userMessagesScreen
 
@@ -32,8 +34,9 @@ fun AppNavHost(
         }
     )
     messageComposerScreen(
+        useCasesSubModule = UserMessagesApp.appModule.useCasesSubModule,
         onMessageSentNavigationCb = {
             navController.popBackStack()
-        }
+        },
     )
 }

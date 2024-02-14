@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import fr.nabonne.usermessages.di.UserMessagesApp
 import fr.nabonne.usermessages.di.UserMessagesApp.Companion.useCasesSubModule
-import fr.nabonne.usermessages.domain.GetMessagesForAuthorUseCase
+import fr.nabonne.usermessages.core.domain.usecases.GetMessagesForAuthorUseCase
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 

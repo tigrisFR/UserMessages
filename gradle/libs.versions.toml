@@ -1,0 +1,37 @@
+[versions]
+androidxComposeBom = "2023.08.00"
+androidxLifecycle = "2.7.0"
+androidxNavigation = "2.7.6"
+androidGradlePlugin = "8.2.2"
+
+[libraries]
+androidx-compose-bom =          { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+#androidx-compose-foundation =           { module = "androidx.compose.foundation:foundation" }
+androidx-compose-ui =                   { module = "androidx.compose.ui:ui" }
+androidx-compose-ui-graphics =          { module = "androidx.compose.ui:ui-graphics" }
+androidx-compose-ui-tooling-preview =   { module = "androidx.compose.ui:ui-tooling-preview" }
+androidx-compose-material3 =            { module = "androidx.compose.material3:material3" }
+lifecycle-viewmodel-ktx =       { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "androidxLifecycle" }
+lifecycle-viewmodel-compose =   { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+lifecycle-runtime-ktx =         { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+lifecycle-runtime-compose =     { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+navigation-runtime-ktx =    { module = "androidx.navigation:navigation-runtime-ktx", version.ref = "androidxNavigation" }
+navigation-compose =        { module = "androidx.navigation:navigation-compose", version.ref = "androidxNavigation" }
+
+[bundles]
+compose-feature-module = [
+    "androidx-compose-ui",
+    "androidx-compose-ui",
+    "androidx-compose-ui-graphics",
+    "androidx-compose-ui-tooling-preview",
+    "androidx-compose-material3",
+    "lifecycle-viewmodel-ktx",
+    "lifecycle-viewmodel-compose",
+    "lifecycle-runtime-ktx",
+    "lifecycle-runtime-compose",
+    "navigation-runtime-ktx",
+    "navigation-compose",
+]
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

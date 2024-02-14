@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -36,10 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import fr.nabonne.usermessages.MainActivity
-import fr.nabonne.usermessages.domain.GetAllMessagesUseCaseImpl
-import fr.nabonne.usermessages.domain.model.Message
-import fr.nabonne.usermessages.ui.theme.UserMessagesTheme
+import fr.nabonne.usermessages.core.domain.model.Message
 
 
 @Composable
@@ -256,7 +252,7 @@ fun LazyColumnInOrder(
 @Preview(showBackground = true)
 @Composable
 fun ScreenByAuthorPreview() {
-    UserMessagesTheme {
+    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -266,28 +262,66 @@ fun ScreenByAuthorPreview() {
                 uiState = AllMessagesScreenViewModel.UiState.ByAuthor(
                     mapOf(
                         "dan" to listOf(
-                            Message("pets", "this is a test1", "dan"),
-                            Message("pets", "this is a test2", "dan"),
+                            Message(
+                                "pets",
+                                "this is a test1",
+                                "dan"
+                            ),
+                            Message(
+                                "pets",
+                                "this is a test2",
+                                "dan"
+                            ),
                         ),
                         "bob" to listOf(
-                            Message("pets",
+                            Message(
+                                "pets",
                                 """
                                     this is a test1
                                     this is a test2 This is a test2
                                     this is a test3 This is a test3 this is a test3 This is a test3
                                 """.trimIndent(),
-                                "bob"),
-                            Message("boats", "this is a test2", "bob"),
+                                "bob"
+                            ),
+                            Message(
+                                "boats",
+                                "this is a test2",
+                                "bob"
+                            ),
                         ),
                         "lucy" to listOf(
-                            Message("pets", "this is a test1", "lucy"),
-                            Message("boats", "this is a test2", "lucy"),
-                            Message("pets", "this is a test2", "lucy"),
+                            Message(
+                                "pets",
+                                "this is a test1",
+                                "lucy"
+                            ),
+                            Message(
+                                "boats",
+                                "this is a test2",
+                                "lucy"
+                            ),
+                            Message(
+                                "pets",
+                                "this is a test2",
+                                "lucy"
+                            ),
                         ),
                         "Hubert Bonisseur de La Bath" to listOf(
-                            Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                            Message("boats", "this is a test2", "Hubert Bonisseur de La Bath"),
-                            Message("pets", "this is a test2", "Hubert Bonisseur de La Bath"),
+                            Message(
+                                "pets",
+                                "this is a test1",
+                                "Hubert Bonisseur de La Bath"
+                            ),
+                            Message(
+                                "boats",
+                                "this is a test2",
+                                "Hubert Bonisseur de La Bath"
+                            ),
+                            Message(
+                                "pets",
+                                "this is a test2",
+                                "Hubert Bonisseur de La Bath"
+                            ),
                         )
                     ),
                     ""
@@ -305,7 +339,7 @@ fun ScreenByAuthorPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenBySubjectPreview() {
-    UserMessagesTheme {
+    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -315,23 +349,49 @@ fun ScreenBySubjectPreview() {
                 uiState = AllMessagesScreenViewModel.UiState.BySubject(
                     mapOf(
                         "pets" to listOf(
-                            Message("pets", "this is a test1", "dan"),
-                            Message("pets", "this is a test2", "dan"),
+                            Message(
+                                "pets",
+                                "this is a test1",
+                                "dan"
+                            ),
+                            Message(
+                                "pets",
+                                "this is a test2",
+                                "dan"
+                            ),
                         ),
                         "boats" to listOf(
-                            Message("boats",
+                            Message(
+                                "boats",
                                 """
                                     this is a test1
                                     this is a test2 This is a test2
                                     this is a test3 This is a test3 this is a test3 This is a test3
                                 """.trimIndent(),
-                                "bob"),
-                            Message("boats", "this is a test2", "lucy"),
+                                "bob"
+                            ),
+                            Message(
+                                "boats",
+                                "this is a test2",
+                                "lucy"
+                            ),
                         ),
                         "ducks" to listOf(
-                            Message("ducks", "this is a test1", "dan"),
-                            Message("ducks", "this is a test2", "bob"),
-                            Message("ducks", "this is a test2", "lucy"),
+                            Message(
+                                "ducks",
+                                "this is a test1",
+                                "dan"
+                            ),
+                            Message(
+                                "ducks",
+                                "this is a test2",
+                                "bob"
+                            ),
+                            Message(
+                                "ducks",
+                                "this is a test2",
+                                "lucy"
+                            ),
                         )
                     ),
                     ""
@@ -349,7 +409,7 @@ fun ScreenBySubjectPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenInOrderPreview() {
-    UserMessagesTheme {
+    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -358,9 +418,21 @@ fun ScreenInOrderPreview() {
             AllMessagesScreen(
                 uiState = AllMessagesScreenViewModel.UiState.InOrder(
                     listOf(
-                        Message("pets", "this is a test1", "Hubert Bonisseur de La Bath"),
-                        Message("boats", "this is a test2", "Hubert Bonisseur de La Bath"),
-                        Message("pets", "this is a test2", "Hubert Bonisseur de La Bath"),
+                        Message(
+                            "pets",
+                            "this is a test1",
+                            "Hubert Bonisseur de La Bath"
+                        ),
+                        Message(
+                            "boats",
+                            "this is a test2",
+                            "Hubert Bonisseur de La Bath"
+                        ),
+                        Message(
+                            "pets",
+                            "this is a test2",
+                            "Hubert Bonisseur de La Bath"
+                        ),
                     ),
                     "",
                 ),

@@ -1,9 +1,12 @@
 package fr.nabonne.usermessages.domain
 
 import app.cash.turbine.test
-import fr.nabonne.usermessages.data.localstorage.LocalStoreImpl
-import fr.nabonne.usermessages.data.network.RemoteApiImpl
-import fr.nabonne.usermessages.domain.model.Message
+import fr.nabonne.usermessages.core.domain.data.LocalStore
+import fr.nabonne.usermessages.core.domain.data.RemoteApi
+import fr.nabonne.usermessages.core.domain.model.Message
+import fr.nabonne.usermessages.core.domain.usecases.GetAllMessagesUseCaseImpl
+import fr.nabonne.usermessages.core.localstorage.LocalStoreImpl
+import fr.nabonne.usermessages.core.network.RemoteApiImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +21,10 @@ import kotlin.time.Duration.Companion.milliseconds
 class GetAllMessagesUseCaseInstrumentedTest {
     val api: RemoteApi = RemoteApiImpl()
     val store: LocalStore = LocalStoreImpl()
-    val getAllMessagesUseCase = GetAllMessagesUseCaseImpl(remoteApi = api, localStore = store)
+    val getAllMessagesUseCase = GetAllMessagesUseCaseImpl(
+        remoteApi = api,
+        localStore = store
+    )
 
     @Test
     fun bySubjectFlowEmitsInitialValueTest() {
