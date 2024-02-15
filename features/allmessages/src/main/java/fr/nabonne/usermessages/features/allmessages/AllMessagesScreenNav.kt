@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import fr.nabonne.usermessages.core.domain.di.UseCasesSubModule
+import fr.nabonne.usermessages.common.domain.di.UseCasesSubModule
 
 //need public visibility for startDestination
 const val ROUTE = "allMessages"

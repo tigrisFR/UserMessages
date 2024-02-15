@@ -1,7 +1,7 @@
 package fr.nabonne.usermessages.di;
 
 import android.app.Application;
-import fr.nabonne.usermessages.core.domain.di.UseCasesSubModuleImpl
+import fr.nabonne.usermessages.common.domain.di.UseCasesSubModuleImpl
 
 class UserMessagesApp : Application() {
     companion object {

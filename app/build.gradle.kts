@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -59,15 +59,21 @@ dependencies {
     implementation(project(":features:allmessages"))
     implementation(project(":features:usermessages"))
     implementation(project(":features:composer"))
-    implementation(project(":core"))
+    implementation(project(":common:domain"))
+    implementation(project(":common:localstorage"))
+    implementation(project(":common:network"))
+    implementation(project(":common:ui"))
+
+    testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.navigation.compose)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.bundles.android.test)
+
     val composeBom = platform(libs.androidx.compose.bom)
+    androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(composeBom)
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-    debugImplementation("androidx.compose.ui:ui-tooling")
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-    androidTestImplementation(libs.turbine)
 }

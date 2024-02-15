@@ -2,8 +2,8 @@ package fr.nabonne.usermessages.features.allmessages
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import fr.nabonne.usermessages.core.domain.model.Message
-import fr.nabonne.usermessages.core.domain.usecases.GetAllMessagesUseCase
+import fr.nabonne.usermessages.common.domain.model.Message
+import fr.nabonne.usermessages.common.domain.usecases.GetAllMessagesUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -11,6 +11,11 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/benchmark" />
+            <option value="$PROJECT_DIR$/common" />
+            <option value="$PROJECT_DIR$/common/domain" />
+            <option value="$PROJECT_DIR$/common/localstorage" />
+            <option value="$PROJECT_DIR$/common/network" />
+            <option value="$PROJECT_DIR$/common/ui" />
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/allmessages" />

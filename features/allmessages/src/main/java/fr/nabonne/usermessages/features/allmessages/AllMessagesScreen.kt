@@ -34,7 +34,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import fr.nabonne.usermessages.core.domain.model.Message
+import fr.nabonne.usermessages.common.domain.model.Message
+import fr.nabonne.usermessages.common.ui.theme.UserMessagesTheme
 
 
 @Composable
@@ -245,7 +246,7 @@ fun LazyColumnInOrder(
 @Preview(showBackground = true)
 @Composable
 fun ScreenByAuthorPreview() {
-    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
+    UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -332,7 +333,7 @@ fun ScreenByAuthorPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenBySubjectPreview() {
-    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
+    UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -402,7 +403,7 @@ fun ScreenBySubjectPreview() {
 @Preview(showBackground = true)
 @Composable
 fun ScreenInOrderPreview() {
-    fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme {
+    UserMessagesTheme {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),

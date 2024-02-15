@@ -33,8 +33,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import fr.nabonne.usermessages.core.domain.model.Message
-import fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme
+import fr.nabonne.usermessages.common.domain.model.Message
+import fr.nabonne.usermessages.common.ui.theme.UserMessagesTheme
 
 
 @Composable

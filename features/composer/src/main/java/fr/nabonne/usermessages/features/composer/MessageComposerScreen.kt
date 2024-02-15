@@ -32,8 +32,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import fr.nabonne.usermessages.core.domain.model.Message
-import fr.nabonne.usermessages.core.ui.theme.UserMessagesTheme
+import fr.nabonne.usermessages.common.domain.model.Message
+import fr.nabonne.usermessages.common.ui.theme.UserMessagesTheme
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch

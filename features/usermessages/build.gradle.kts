@@ -40,12 +40,15 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":common:domain"))
+    implementation(project(":common:ui"))
 
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)
     implementation(libs.bundles.featuremodule.compose)
+    debugImplementation(libs.androidx.compose.ui.tooling)
     testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(composeBom)
-    androidTestImplementation(libs.bundles.android.test)
+    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 }
