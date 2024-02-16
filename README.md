@@ -1,5 +1,31 @@
 # UserMessages Design and Development Notes
 
+### Addendum 02/14: Notes on Navigation and Screens
+
+*I had not mentioned much about the navigation part of my code so far. Since it may be unclear for developers unfamiliar with Google's jetpack Compose, here's some more notes to help make sense of it:*
+
+Same as the rest of the code I used the latest guidelines from Google: the compose and navigation-compose libs.
+The app has a unique android Activity and no Fragments. It relies on Composable screens that are called by a NavController when it's time to be displayed.
+This navigation controller manages a stack of NavBackStackEntries (where each entry corresponds to a destination, in the order they were navigated to, with the active one at the top).
+A navigation graph is declared and built dynamically via a NavHost: it ties up a tree of composable destinations, composable screens and navigation callbacks, and allows for type-safe navigation arguments to be passed along.
+
+As a result, the app starts on the AllMessages screen, and from there:
+- we can either go to the message Composer screen by tapping the FloatingActionButton
+- or tap a user name tag to go to a UserMessages screen for that user
+
+The Composer screen is a dead-end. It is "popped" from the navigation stack either by "back action/gesture" or when the state of its viewmodel signals that the message was sent. It accepts a user name as a type-safe navigation parameter which, if present, prefills the author field.
+
+From the UserMessages screen we can:
+- "back action/gesture" to the previous entry in the stack -the AllMessages screen is the only possibility right now-
+- or go to the Composer screen via the FAB, in which case the user name is passed as a navigation parameter to prefill the author field there.
+
+Final note: as for the rest of the code, it has been carefully encapsulated to support modularisation: we can easily move the screen, the navigation and the viewmodel files to a separate gradle module for each one of the screens/features.
+Presently, it's a bit overkill for 3 fairly simple screens but in the long run:
+- this greatly helps to reduce the amount of time developpers spend recompiling classes or running whatever unit-tests or lint checks are hooked up to their pre-commit hook for instance
+- as well as limits the number of revision conflicts between team members
+- and enforces clear and clean architecure/dependencies
+### end of Addendum
+
 ## TESTING
 - All 3 use-cases work
 - The GET use-cases will require you to click fetch before displaying results: indeed the ViewModels don't fetch upon initialization. This is so that I could correctly debug the post and get requests in succession. It would be very simple to put a fetch call in the init blocks in each of these ViewModels though.
@@ -27,7 +53,7 @@ The lack of message unique identifier makes it hard for storing messages locally
 
 The UI needs to provide a screen for each use case/ each api call
 - a **AllMessages** screen: displays all messages grouped by users and can be refreshed to get new ones.
-- a ***UserMessages** screen: same as above but displays only the ones sent by that user
+- a **UserMessages** screen: same as above but displays only the ones sent by that user
 - a **Message Composer** screen: allows to create a Message from scratch
 	whatever user name is used is stored to SharedPref and prepopulates the field next time
 - a HomeScreen that allows to navigate to all these separate screens
