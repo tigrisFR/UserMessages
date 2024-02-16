@@ -22,17 +22,24 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
         }
         create("benchmark") {
+            // Enable all the optimizations from release build through initWith(release).
             initWith(buildTypes.getByName("release"))
+            matchingFallbacks.add("release")
+            // Debug key signing is available to everyone.
             signingConfig = signingConfigs.getByName("debug")
-            matchingFallbacks += listOf("release")
-            isDebuggable = false
+            // Only use benchmark proguard rules
+            proguardFiles("benchmark-rules.pro")
+            //isDebuggable = false
+            isMinifyEnabled = true
+            applicationIdSuffix = ".benchmark"
         }
     }
     compileOptions {
@@ -56,6 +63,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.profileinstaller)
     implementation(project(":features:allmessages"))
     implementation(project(":features:usermessages"))
     implementation(project(":features:composer"))

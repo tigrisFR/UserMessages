@@ -31,9 +31,11 @@ class ExampleStartupBenchmark {
         packageName = "fr.nabonne.usermessages",
         metrics = listOf(StartupTimingMetric()),
         iterations = 5,
-        startupMode = StartupMode.COLD
+        startupMode = StartupMode.COLD,
+        setupBlock = {
+            pressHome()
+        }
     ) {
-        pressHome()
         startActivityAndWait()
     }
 }
