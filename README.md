@@ -1,3 +1,5 @@
+This pet project stems from an interview homework assignement. I had fun modularizing a data->domain<-ui architecture.
+
 # UserMessages Design and Development Notes
 
 ### Addendum 02/14: Notes on Navigation and Screens
